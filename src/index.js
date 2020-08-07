@@ -1,3 +1,2 @@
-import './polyfills';
-import Croppr from './croppr.js';
-export default Croppr;
+import CropperCompress from "./cropper_compress.js";
+export default CropperCompress;

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="../dist/cropper_compress.js"></script>
+        <link rel="stylesheet" href="../dist/cropper_compress.css" />
+    </head>
+
+    <style>
+        .modal {
+            padding: 18px;
+            position: absolute;
+            border: 1px solid lightgrey;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+        }
+
+        .modal img {
+            max-width: 100%;
+        }
+    </style>
+
+    <body>
+        <h1>Cropper compress</h1>
+        <div class="modal">
+            <img
+                src="https://unsplash.it/500/500/?random"
+                alt=""
+                id="cropper_compress"
+            />
+        </div>
+
+        <script>
+            var cropper_compress = new CropperCompress("#cropper_compress", {
+                compression: false,
+                clippingType: "circle",
+            });
+
+            var value = cropper_compress.getCropped();
+        </script>
+    </body>
+</html>
