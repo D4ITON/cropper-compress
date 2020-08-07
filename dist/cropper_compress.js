@@ -13,7 +13,30 @@
 	(global.CropperCompress = factory());
 }(this, (function () { 'use strict';
 
-var TEMPLATE = '<div class="cropper_compress-container" touch-action="none">' + '<div class="wrap-box">' + '<div class="cropper_compress-image"></div>' + "</div>" + '<div class="cropper_compress-actions">' + "<button>Subir imagen</button>" + '<span class="cropper-dashed dashed-h"></span>' + "</div>" + "</div>";
+/**
+ * Muestra la imagen si existe
+ * @param {*} imageSource
+ */
+function createTemplate(imageSource) {
+  var template = document.querySelector("#cropper_compress");
+  template.innerHTML = "\n  <div class=\"cropper_compress-container\" touch-action=\"none\">\n  <div class=\"wrap-box\">\n    <div class=\"cropper_compress-image\">\n      <img src=\"" + imageSource + "\" alt=\"\" id=\"sourceImage\">\n    </div>\n  </div>\n  <div class=\"cropper_compress-actions\">\n    <label class=\"cropper_compress-actions__button\">\n      <input type=\"file\" size=\"60\" id=\"inputImage\" accept=\"image/*\">\n      Subir imagen\n    </label>\n    <button class=\"cropper_compress-actions__button\">Quitar imagen</button>\n  </div>\n</div>\n  ";
+}
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
+  return typeof obj;
+} : function (obj) {
+  return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+};
+
+
+
+
+
+
+
+
+
+
 
 var classCallCheck = function (instance, Constructor) {
   if (!(instance instanceof Constructor)) {
@@ -39,6 +62,20 @@ var createClass = function () {
   };
 }();
 
+function initPreview() {
+    var sourceElementImage = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+    var imageHasSrc = sourceElementImage.getAttribute("src");
+    if (!imageHasSrc) {
+        return createTemplate("../noimage.png");
+    } else {
+        console.log(typeof sourceElementImage === "undefined" ? "undefined" : _typeof(sourceElementImage));
+        var image = document.createElement("img");
+        image.src = imageHasSrc;
+        console.log(image);
+        return createTemplate(imageHasSrc);
+    }
+}
+
 var CropperCompress$1 = function () {
     /**
      * @constructor
@@ -51,9 +88,8 @@ var CropperCompress$1 = function () {
     createClass(CropperCompress, [{
         key: "init",
         value: function init() {
-            var template = document.querySelector("#cropper_compress");
-            template.innerHTML = TEMPLATE;
-            console.log("message");
+            var sourceImage = document.querySelector("#sourceImage");
+            initPreview(sourceImage);
             return this;
         }
     }, {

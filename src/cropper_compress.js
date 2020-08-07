@@ -1,4 +1,4 @@
-import TEMPLATE from "./template";
+import initPreview from "./preview";
 
 export default class CropperCompress {
     /**
@@ -10,9 +10,10 @@ export default class CropperCompress {
     }
 
     init() {
-        const template = document.querySelector("#cropper_compress");
-        template.innerHTML = TEMPLATE;
-        console.log("message");
+        const sourceImage = document.querySelector("#sourceImage");
+
+        // Inicia el preview
+        initPreview(sourceImage);
         return this;
     }
 

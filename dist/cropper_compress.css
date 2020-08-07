@@ -1,3 +1,34 @@
-.cropper_compress {
-  background-color: #fff;
+.cropper_compress-container {
+  max-width: 250px;
+}
+
+.cropper_compress-actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Boton para subir imagen*/
+.cropper_compress-actions__button {
+  border: 1px solid #ccc;
+  display: inline-block;
+  padding: 6px 12px;
+  cursor: pointer;
+  background-color: #C4C4C4;
+  border-radius: 5px;
+}
+
+.cropper_compress-actions__button:hover {
+  background-color: #959494;
+}
+
+/* Oculta el boton de archivo que sale por defecto */
+.cropper_compress-actions__button #inputImage {
+  display: none;
+}
+
+.cropper_compress-image {
+  width: 250px;
+  height: 250px;
+  border: 1px solid #eee;
+  margin-bottom: 10px;
 }
