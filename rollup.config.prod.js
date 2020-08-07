@@ -1,23 +1,23 @@
-import json from 'rollup-plugin-json';
-import babel from 'rollup-plugin-babel';
-import uglify from 'rollup-plugin-uglify';
+import json from "rollup-plugin-json";
+import babel from "rollup-plugin-babel";
+import uglify from "rollup-plugin-uglify";
 
 var banner = `/**
- * Croppr.js
- * https://github.com/jamesssooi/Croppr.js
- * 
- * A JavaScript image cropper that's lightweight, awesome, and has
- * zero dependencies.
- * 
- * (C) 2017 James Ooi. Released under the MIT License.
- */
-`
+* cropper_compress
+* https://github.com/D4ITON/cropper_compress
+* 
+* Compress and crop an image.
+* 
+* (c) 2020-present Dalthon. Released under the MIT License.
+*/
+`;
 
 export default {
-  entry: 'src/index.js',
-  plugins: [ json(), babel(), uglify() ],
-  format: 'umd',
-  moduleName: 'Croppr',
-  dest: 'dist/croppr.min.js',
-  banner: banner
-};r
+    entry: "src/index.js",
+    plugins: [json(), babel(), uglify()],
+    format: "umd",
+    moduleName: "CropperCompress",
+    dest: "dist/cropper_compress.min.js",
+    banner: banner,
+};
+r;
