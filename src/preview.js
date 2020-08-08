@@ -11,12 +11,13 @@ export default function initPreview(sourceElementImage = null) {
      */
     const imageHasSrc = sourceElementImage.getAttribute("src");
     if (!imageHasSrc) {
-        return createTemplate("../noimage.png");
+        createTemplate("../noimage.png");
+        return false;
     } else {
         const image = document.createElement("img");
         image.src = imageHasSrc;
-
-        return createTemplate(imageHasSrc);
+        createTemplate(imageHasSrc);
+        return true;
     }
 }
 

@@ -2,6 +2,7 @@
  * Muestra la imagen si existe
  * @param {Element} imageSource - Imagen que se mostrara o no
  */
+
 export default function createTemplate(imageSource) {
     // Muestra el template
     const template = document.querySelector("#cropper_compress");
@@ -21,4 +22,32 @@ export default function createTemplate(imageSource) {
   </div>
 </div>
   `;
+}
+
+export function modalCropp() {
+    const modal = document.createElement("div");
+    modal.innerHTML = `
+    <div class="cropper_compress_modal">
+      <div class="cropper_compress_modal__box">
+        <div class="box_header">
+          <span>Recorta tu nueva imagen</span>
+          <button id="btnCloseModal">x</button>
+        </div>
+        <div class="box_body">
+          <img src="" id="newImageToBeCropped">
+        </div>
+        <div class="box_footer"><button>Establecer mi nueva imagen</button></div>
+      </div>
+    </div>
+    `;
+    const template = document.querySelector("#cropper_compress");
+    template.appendChild(modal);
+
+    // Para borrar la informacion
+    document.getElementById("btnCloseModal").onclick = function () {
+        // Borra la informacion que tiene el modal
+        document.querySelector(".cropper_compress_modal").style.display =
+            "none";
+        document.querySelector(".cropper_compress_modal").innerHTML = "";
+    };
 }

@@ -7,23 +7,25 @@
 </head>
 
 <style>
-  .modal {
+  .contenedor {
     padding: 18px;
     position: absolute;
     border: 1px solid lightgrey;
-    left: 50%;
-    transform: translateX(-50%);
-    /* width: 300px; */
+    margin: 0;
   }
 
-  .modal img {
+  .contenedor img {
     max-width: 100%;
+  }
+
+  .contenedor h1 {
+    margin: 0;
   }
 </style>
 
 <body>
-  <h1>Cropper compress</h1>
-  <div class="modal">
+  <div class="contenedor">
+    <h1>Cropper compress</h1>
     <div id="cropper_compress">
       <img src="" alt="" id="sourceImage">
     </div>
