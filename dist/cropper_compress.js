@@ -14,29 +14,28 @@
 }(this, (function () { 'use strict';
 
 /**
+ * Pre visualiza la imagen cargada para mostrar
+ * @param {Element} sourceElementImage  - The target element for cropping.
+ */
+function initPreview() {
+    var sourceElementImage = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+    var imageHasSrc = sourceElementImage.getAttribute("src");
+    if (!imageHasSrc) {
+        return createTemplate("../noimage.png");
+    } else {
+        var image = document.createElement("img");
+        image.src = imageHasSrc;
+        return createTemplate(imageHasSrc);
+    }
+}
+/**
  * Muestra la imagen si existe
- * @param {*} imageSource
+ * @param {String} imageSource
  */
 function createTemplate(imageSource) {
-  var template = document.querySelector("#cropper_compress");
-  template.innerHTML = "\n  <div class=\"cropper_compress-container\" touch-action=\"none\">\n  <div class=\"wrap-box\">\n    <div class=\"cropper_compress-image\">\n      <img src=\"" + imageSource + "\" alt=\"\" id=\"sourceImage\">\n    </div>\n  </div>\n  <div class=\"cropper_compress-actions\">\n    <label class=\"cropper_compress-actions__button\">\n      <input type=\"file\" size=\"60\" id=\"inputImage\" accept=\"image/*\">\n      Subir imagen\n    </label>\n    <button class=\"cropper_compress-actions__button\">Quitar imagen</button>\n  </div>\n</div>\n  ";
+    var template = document.querySelector("#cropper_compress");
+    template.innerHTML = "\n    <div class=\"cropper_compress-container\" touch-action=\"none\">\n    <div class=\"wrap-box\">\n      <div class=\"cropper_compress-image\">\n        <img src=\"" + imageSource + "\" alt=\"\" id=\"sourceImage\">\n      </div>\n    </div>\n    <div class=\"cropper_compress-actions\">\n      <label class=\"cropper_compress-actions__button\">\n        <input type=\"file\" size=\"60\" id=\"inputImage\" accept=\"image/*\">\n        Subir imagen\n      </label>\n      <button class=\"cropper_compress-actions__button\">Quitar imagen</button>\n    </div>\n    </div>\n";
 }
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
-  return typeof obj;
-} : function (obj) {
-  return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-};
-
-
-
-
-
-
-
-
-
-
 
 var classCallCheck = function (instance, Constructor) {
   if (!(instance instanceof Constructor)) {
@@ -61,20 +60,6 @@ var createClass = function () {
     return Constructor;
   };
 }();
-
-function initPreview() {
-    var sourceElementImage = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-    var imageHasSrc = sourceElementImage.getAttribute("src");
-    if (!imageHasSrc) {
-        return createTemplate("../noimage.png");
-    } else {
-        console.log(typeof sourceElementImage === "undefined" ? "undefined" : _typeof(sourceElementImage));
-        var image = document.createElement("img");
-        image.src = imageHasSrc;
-        console.log(image);
-        return createTemplate(imageHasSrc);
-    }
-}
 
 var CropperCompress$1 = function () {
     /**

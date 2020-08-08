@@ -1,4 +1,5 @@
 import initPreview from "./preview";
+import modalToCrop from "./modal_to_crop";
 
 export default class CropperCompress {
     /**
@@ -7,8 +8,12 @@ export default class CropperCompress {
      */
     constructor() {
         this.init();
+        modalToCrop();
     }
 
+    /**
+     * Crea el template inicial
+     */
     init() {
         const sourceImage = document.querySelector("#sourceImage");
 

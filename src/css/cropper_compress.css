@@ -17,6 +17,10 @@
   border-radius: 5px;
 }
 
+.cropper_compress-actions__button:hover {
+  background-color: #929292;
+}
+
 /* Oculta el boton de archivo que sale por defecto */
 .cropper_compress-actions__button #inputImage {
   display: none;

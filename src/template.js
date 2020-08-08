@@ -1,6 +1,6 @@
 /**
  * Muestra la imagen si existe
- * @param {*} imageSource
+ * @param {Element} imageSource - Imagen que se mostrara o no
  */
 export default function createTemplate(imageSource) {
     // Muestra el template
