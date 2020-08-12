@@ -1,5 +1,10 @@
 /**
- * Cropper compress main
+ * cropper_compress
+ * https://github.com/D4ITON/cropper_compress
+ *
+ * Compress and crop an image.
+ *
+ * (c) 2020-present Dalthon. Released under the MIT License.
  */
 
 const URL = window.URL || window.webkitURL;

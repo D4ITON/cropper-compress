@@ -28,15 +28,12 @@
         "rollup-plugin-babel": "^2.7.1",
         "rollup-plugin-cleanup": "^1.0.0",
         "rollup-plugin-json": "^2.1.0",
-        "rollup-plugin-uglify": "^1.0.1",
+        "rollup-plugin-uglify": "^6.0.4",
         "sinon": "^1.17.7"
     },
     "babel": {
         "presets": [
             "es2015-rollup"
         ]
-    },
-    "dependencies": {
-        "cropperjs": "^1.5.7"
     }
 }
