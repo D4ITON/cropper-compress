@@ -66,7 +66,7 @@ export default class CropperCompress {
         <div class="cropper_compress-container" touch-action="none">
           <div class="wrap-box">
             <div class="cropper_compress-image">
-              <img src="${elementSrc}" alt="" id="sourceImage">
+              <img src="${elementSrc}">
             </div>
           </div>
           <div class="cropper_compress-actions">
@@ -163,7 +163,7 @@ export default class CropperCompress {
             <div class="cropper_compress_modal__container-box_body">
               <img src="${this.data.url}" ref="image" alt="${this.data.name}" crossorigin="anonymous" id="imageToBeCropped">
             </div>
-            <button class="cropper_compress_modal__container-box_footer">Establecer mi nueva imagen</button>
+            <button id="buttonCropImage" class="cropper_compress_modal__container-box_footer">Establecer mi nueva imagen</button>
           </div>
         </div>`;
     }
@@ -179,7 +179,8 @@ export default class CropperCompress {
         this.imageToBeCropped = document.getElementById("imageToBeCropped");
 
         const { data } = this;
-        if (data.cropped || this.cropper) {
+        // if (data.cropped || this.cropper) // Quitamos data.cropped para que recorte mas de una vez.
+        if (this.cropper) {
             return;
         }
 
@@ -216,6 +217,8 @@ export default class CropperCompress {
     attachHandlerEventsAfterOnModal() {
         this.buttonCloseModal = document.getElementById("buttonCloseModal");
         this.buttonCloseModal.addEventListener("click", this.stop.bind(this));
+        this.buttonCropImage = document.getElementById("buttonCropImage");
+        this.buttonCropImage.addEventListener("click", this.crop.bind(this));
     }
 
     /**
@@ -253,12 +256,40 @@ export default class CropperCompress {
                     )
                     .toDataURL(data.type),
             });
+            console.log(this);
+            this.sendToEndPoint();
             this.stop();
         }
     }
 
     updateCrop(data) {
         Object.assign(this.data, data);
+    }
+
+    async sendToEndPoint() {
+        // Fetch function
+        const { data } = this;
+        if (!data.url) {
+            throw "No url image.";
+        }
+
+        const block = data.url.split(";");
+        const contentType = block[0].split(":")[1];
+        const realData = block[1].split(",")[1];
+
+        const blob = CropperCompress.b64toBlob(realData, contentType);
+        const formData = new FormData();
+        formData.append("image", blob);
+
+        try {
+            const response = await fetch(this.endPoint, {
+                method: "POST",
+                body: formData,
+            });
+            console.log(response);
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     /**
@@ -287,5 +318,43 @@ export default class CropperCompress {
             compression: defaultValue(compression, defaults.compression),
             clippingType: defaultValue(clippingType, defaults.clippingType),
         };
+    }
+
+    /**
+     * Convert a base64 string in a Blob according to the data and contentType.
+     *
+     * @param b64Data {String} Pure base64 string without contentType
+     * @param contentType {String} the content type of the file i.e (image/jpeg - image/png - text/plain)
+     * @param sliceSize {Int} SliceSize to process the byteCharacters
+     * @see http://stackoverflow.com/questions/16245767/creating-a-blob-from-a-base64-string-in-javascript
+     * @see https://ourcodeworld.com/articles/read/322/how-to-convert-a-base64-image-into-a-image-file-and-upload-it-with-an-asynchronous-form-using-jquery
+     * @return Blob
+     */
+    static b64toBlob(b64Data, contentType, sliceSize) {
+        contentType = contentType || "";
+        sliceSize = sliceSize || 512;
+
+        var byteCharacters = atob(b64Data);
+        var byteArrays = [];
+
+        for (
+            var offset = 0;
+            offset < byteCharacters.length;
+            offset += sliceSize
+        ) {
+            var slice = byteCharacters.slice(offset, offset + sliceSize);
+
+            var byteNumbers = new Array(slice.length);
+            for (var i = 0; i < slice.length; i++) {
+                byteNumbers[i] = slice.charCodeAt(i);
+            }
+
+            var byteArray = new Uint8Array(byteNumbers);
+
+            byteArrays.push(byteArray);
+        }
+
+        var blob = new Blob(byteArrays, { type: contentType });
+        return blob;
     }
 }

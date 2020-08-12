@@ -89,7 +89,7 @@ var CropperCompress$1 = function () {
         key: "createDOM",
         value: function createDOM(elementSrc) {
             this.containerEl = document.querySelector("#cropper_compress");
-            this.containerEl.outerHTML = "\n        <div class=\"cropper_compress-container\" touch-action=\"none\">\n          <div class=\"wrap-box\">\n            <div class=\"cropper_compress-image\">\n              <img src=\"" + elementSrc + "\" alt=\"\" id=\"sourceImage\">\n            </div>\n          </div>\n          <div class=\"cropper_compress-actions\">\n            <label class=\"cropper_compress-actions__button\">\n              <input type=\"file\" size=\"60\" id=\"inputImage\" accept=\"image/*\">\n              Subir imagen\n            </label>\n            <button class=\"cropper_compress-actions__button\">Quitar imagen</button>\n          </div>\n        </div>\n      ";
+            this.containerEl.outerHTML = "\n        <div class=\"cropper_compress-container\" touch-action=\"none\">\n          <div class=\"wrap-box\">\n            <div class=\"cropper_compress-image\">\n              <img src=\"" + elementSrc + "\">\n            </div>\n          </div>\n          <div class=\"cropper_compress-actions\">\n            <label class=\"cropper_compress-actions__button\">\n              <input type=\"file\" size=\"60\" id=\"inputImage\" accept=\"image/*\">\n              Subir imagen\n            </label>\n            <button class=\"cropper_compress-actions__button\">Quitar imagen</button>\n          </div>\n        </div>\n      ";
         }
     }, {
         key: "attachHandlerEvents",
@@ -164,7 +164,7 @@ var CropperCompress$1 = function () {
         key: "createModalDOM",
         value: function createModalDOM() {
             this.modalComponent = document.getElementById("cropper_compress_modal");
-            this.modalComponent.innerHTML = "\n        <div class=\"cropper_compress_modal__container\">\n          <div class=\"cropper_compress_modal__container-box\">\n            <div class=\"cropper_compress_modal__container-box_header\">\n              <span>Recorta tu nueva imagen</span>\n              <button id=\"buttonCloseModal\">&times;</button>\n            </div>\n            <div class=\"cropper_compress_modal__container-box_body\">\n              <img src=\"" + this.data.url + "\" ref=\"image\" alt=\"" + this.data.name + "\" crossorigin=\"anonymous\" id=\"imageToBeCropped\">\n            </div>\n            <button class=\"cropper_compress_modal__container-box_footer\">Establecer mi nueva imagen</button>\n          </div>\n        </div>";
+            this.modalComponent.innerHTML = "\n        <div class=\"cropper_compress_modal__container\">\n          <div class=\"cropper_compress_modal__container-box\">\n            <div class=\"cropper_compress_modal__container-box_header\">\n              <span>Recorta tu nueva imagen</span>\n              <button id=\"buttonCloseModal\">&times;</button>\n            </div>\n            <div class=\"cropper_compress_modal__container-box_body\">\n              <img src=\"" + this.data.url + "\" ref=\"image\" alt=\"" + this.data.name + "\" crossorigin=\"anonymous\" id=\"imageToBeCropped\">\n            </div>\n            <button id=\"buttonCropImage\" class=\"cropper_compress_modal__container-box_footer\">Establecer mi nueva imagen</button>\n          </div>\n        </div>";
         }
     }, {
         key: "deleteModalDOM",
@@ -177,7 +177,7 @@ var CropperCompress$1 = function () {
             var _this2 = this;
             this.imageToBeCropped = document.getElementById("imageToBeCropped");
             var data = this.data;
-            if (data.cropped || this.cropper) {
+            if (this.cropper) {
                 return;
             }
             this.cropper = new Cropper(this.imageToBeCropped, {
@@ -208,6 +208,8 @@ var CropperCompress$1 = function () {
         value: function attachHandlerEventsAfterOnModal() {
             this.buttonCloseModal = document.getElementById("buttonCloseModal");
             this.buttonCloseModal.addEventListener("click", this.stop.bind(this));
+            this.buttonCropImage = document.getElementById("buttonCropImage");
+            this.buttonCropImage.addEventListener("click", this.crop.bind(this));
         }
     }, {
         key: "stop",
@@ -235,6 +237,8 @@ var CropperCompress$1 = function () {
                         fillColor: "#fff"
                     }).toDataURL(data.type)
                 });
+                console.log(this);
+                this.sendToEndPoint();
                 this.stop();
             }
         }
@@ -242,6 +246,29 @@ var CropperCompress$1 = function () {
         key: "updateCrop",
         value: function updateCrop(data) {
             Object.assign(this.data, data);
+        }
+    }, {
+        key: "sendToEndPoint",
+        value: async function sendToEndPoint() {
+            var data = this.data;
+            if (!data.url) {
+                throw "No url image.";
+            }
+            var block = data.url.split(";");
+            var contentType = block[0].split(":")[1];
+            var realData = block[1].split(",")[1];
+            var blob = CropperCompress.b64toBlob(realData, contentType);
+            var formData = new FormData();
+            formData.append("image", blob);
+            try {
+                var response = await fetch(this.endPoint, {
+                    method: "POST",
+                    body: formData
+                });
+                console.log(response);
+            } catch (error) {
+                console.log(error);
+            }
         }
     }], [{
         key: "parseOptions",
@@ -265,6 +292,35 @@ var CropperCompress$1 = function () {
                 compression: defaultValue(compression, defaults$$1.compression),
                 clippingType: defaultValue(clippingType, defaults$$1.clippingType)
             };
+        }
+        /**
+         * Convert a base64 string in a Blob according to the data and contentType.
+         *
+         * @param b64Data {String} Pure base64 string without contentType
+         * @param contentType {String} the content type of the file i.e (image/jpeg - image/png - text/plain)
+         * @param sliceSize {Int} SliceSize to process the byteCharacters
+         * @see http://stackoverflow.com/questions/16245767/creating-a-blob-from-a-base64-string-in-javascript
+         * @see https://ourcodeworld.com/articles/read/322/how-to-convert-a-base64-image-into-a-image-file-and-upload-it-with-an-asynchronous-form-using-jquery
+         * @return Blob
+         */
+    }, {
+        key: "b64toBlob",
+        value: function b64toBlob(b64Data, contentType, sliceSize) {
+            contentType = contentType || "";
+            sliceSize = sliceSize || 512;
+            var byteCharacters = atob(b64Data);
+            var byteArrays = [];
+            for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+                var slice = byteCharacters.slice(offset, offset + sliceSize);
+                var byteNumbers = new Array(slice.length);
+                for (var i = 0; i < slice.length; i++) {
+                    byteNumbers[i] = slice.charCodeAt(i);
+                }
+                var byteArray = new Uint8Array(byteNumbers);
+                byteArrays.push(byteArray);
+            }
+            var blob = new Blob(byteArrays, { type: contentType });
+            return blob;
         }
     }]);
     return CropperCompress;
