@@ -142,7 +142,7 @@ var CropperCompress$1 = function () {
             var target = _ref.target;
             this.read(target.files).then(function (data) {
                 target.value = "";
-                _this.update(data);
+                _this.updateCreateDOM(data);
             }).catch(function (e) {
                 target.value = "";
                 _this.alert(e);
@@ -153,18 +153,95 @@ var CropperCompress$1 = function () {
          * @param {Object} data
          */
     }, {
-        key: "update",
-        value: function update(data) {
+        key: "updateCreateDOM",
+        value: function updateCreateDOM(data) {
             Object.assign(this.data, data);
+            this.createModalDOM();
             this.start();
-            console.log(this);
-            console.log("message");
+            this.attachHandlerEventsAfterOnModal();
+        }
+    }, {
+        key: "createModalDOM",
+        value: function createModalDOM() {
+            this.modalComponent = document.getElementById("cropper_compress_modal");
+            this.modalComponent.innerHTML = "\n        <div class=\"cropper_compress_modal__container\">\n          <div class=\"cropper_compress_modal__container-box\">\n            <div class=\"cropper_compress_modal__container-box_header\">\n              <span>Recorta tu nueva imagen</span>\n              <button id=\"buttonCloseModal\">&times;</button>\n            </div>\n            <div class=\"cropper_compress_modal__container-box_body\">\n              <img src=\"" + this.data.url + "\" ref=\"image\" alt=\"" + this.data.name + "\" crossorigin=\"anonymous\" id=\"imageToBeCropped\">\n            </div>\n            <button class=\"cropper_compress_modal__container-box_footer\">Establecer mi nueva imagen</button>\n          </div>\n        </div>";
+        }
+    }, {
+        key: "deleteModalDOM",
+        value: function deleteModalDOM() {
+            this.modalComponent.innerHTML = "";
         }
     }, {
         key: "start",
         value: function start() {
-            this.modalComponent = document.getElementById("cropper_compress_modal");
-            this.modalComponent.innerHTML = "\n        <div class=\"cropper_compress_modal__container\">\n          <div class=\"cropper_compress_modal__container-box\">\n            <div class=\"cropper_compress_modal__container-box_header\">\n              <span>Recorta tu nueva imagen</span>\n              <button id=\"buttonCloseModal\">&times;</button>\n            </div>\n            <div class=\"cropper_compress_modal__container-box_body\">\n              <img src=\"\" crossorigin=\"anonymous\" id=\"imageToBeCropped\">\n            </div>\n            <div class=\"cropper_compress_modal__container-box_footer\"><button>Establecer mi nueva imagen</button></div>\n          </div>\n        </div>";
+            var _this2 = this;
+            this.imageToBeCropped = document.getElementById("imageToBeCropped");
+            var data = this.data;
+            if (data.cropped || this.cropper) {
+                return;
+            }
+            this.cropper = new Cropper(this.imageToBeCropped, {
+                autoCrop: true,
+                aspectRatio: 1,
+                viewMode: 1,
+                background: false,
+                ready: function ready() {
+                    if (_this2.croppedData) {
+                        _this2.cropper.crop().setData(_this2.croppedData).setCanvasData(_this2.canvasData).setCropBoxData(_this2.cropBoxData);
+                        _this2.croppedData = null;
+                        _this2.canvasData = null;
+                        _this2.cropBoxData = null;
+                    }
+                },
+                crop: function crop(_ref2) {
+                    var detail = _ref2.detail;
+                    if (detail.width > 0 && detail.height > 0 && !data.cropping) {
+                        _this2.updateCrop({
+                            cropping: true
+                        });
+                    }
+                }
+            });
+        }
+    }, {
+        key: "attachHandlerEventsAfterOnModal",
+        value: function attachHandlerEventsAfterOnModal() {
+            this.buttonCloseModal = document.getElementById("buttonCloseModal");
+            this.buttonCloseModal.addEventListener("click", this.stop.bind(this));
+        }
+    }, {
+        key: "stop",
+        value: function stop() {
+            this.deleteModalDOM();
+            if (this.cropper) {
+                this.cropper.destroy();
+                this.cropper = null;
+            }
+        }
+    }, {
+        key: "crop",
+        value: function crop() {
+            var cropper = this.cropper,
+                data = this.data;
+            if (data.cropping) {
+                this.croppedData = cropper.getData();
+                this.canvasData = cropper.getCanvasData();
+                this.cropBoxData = cropper.getCropBoxData();
+                this.updateCrop({
+                    cropped: true,
+                    cropping: false,
+                    previousUrl: data.url,
+                    url: cropper.getCroppedCanvas(data.type === "image/png" ? {} : {
+                        fillColor: "#fff"
+                    }).toDataURL(data.type)
+                });
+                this.stop();
+            }
+        }
+    }, {
+        key: "updateCrop",
+        value: function updateCrop(data) {
+            Object.assign(this.data, data);
         }
     }], [{
         key: "parseOptions",

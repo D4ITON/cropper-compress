@@ -4,12 +4,22 @@
 <head>
   <script src="../dist/cropper_compress.js"></script>
   <link rel="stylesheet" href="../dist/cropper_compress.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Importante agregar el paquete cropperjs -->
+  <script src="https://unpkg.com/cropperjs@1.5.7/dist/cropper.min.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/cropperjs@1.5.7/dist/cropper.min.css">
+  <!-- Importacion de paquete cropper.js -->
 </head>
 
 <style>
-  * {
+  body {
     box-sizing: border-box;
     margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
   }
 
   .contenedor {
@@ -25,6 +35,10 @@
 
   .contenedor h1 {
     margin: 0;
+    margin-bottom: 16px;
+    font-size: 14px;
+    font-family: Arial, sans-serif;
+    text-align: center;
   }
 </style>
 
@@ -39,9 +53,7 @@
   <!-- Crear el modal afuera de otras etiquetas, se muestra cuando se carga una imagen. -->
   <div id="cropper_compress_modal"></div>
 
-  <!-- Importante agregar el paquete cropperjs -->
-  <!-- <script src="../package/cropper.min.js"></script> -->
-  <script src="https://unpkg.com/cropperjs@1.5.7/dist/cropper.min.js"></script>
+  <!-- Inicialización de componente -->
   <script>
     var cropper_compress = new CropperCompress(
       "#sourceImage",

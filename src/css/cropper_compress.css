@@ -37,6 +37,8 @@
  * Modal cropper compress
  * ======================
  */
+
+/* Container del modal */
 .cropper_compress_modal__container {
   position: fixed;
   top: 0;
@@ -47,19 +49,58 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
 }
 
+/* Caja dentro del modal, ese que va centrado en el medio */
 .cropper_compress_modal__container .cropper_compress_modal__container-box {
-  width: 448px;
+  background: #fff;
+  width: 85%;
   height: 500px;
-  background-color: #fff;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.box_body {
-  height: 400px;
+/* Header del modal donde va el titulo y el boton */
+.cropper_compress_modal__container .cropper_compress_modal__container-box .cropper_compress_modal__container-box_header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
   width: 100%;
 }
 
-/* #imageToBeCropped {
-  width: 250px;
-} */
+/* Button para ocultar modal */
+.cropper_compress_modal__container .cropper_compress_modal__container-box .cropper_compress_modal__container-box_header button {
+  cursor: pointer;
+}
+
+/* Cuerpo del cropper, aqui va la imagen */
+.cropper_compress_modal__container .cropper_compress_modal__container-box .cropper_compress_modal__container-box_body {
+  width: 100%;
+  height: 100%;
+  background-color: #c4c4c4;
+  margin-bottom: 16px;
+}
+
+.cropper_compress_modal__container .cropper_compress_modal__container-box .cropper_compress_modal__container-box_body #imageToBeCropped {
+  max-height: 100%;
+  max-width: 100%;
+}
+
+/* Pie del modal (boton para mandar la imagen) */
+.cropper_compress_modal__container .cropper_compress_modal__container-box .cropper_compress_modal__container-box_footer {
+  width: 100%;
+  padding: 14px;
+  cursor: pointer;
+}
+
+@media (min-width: 600px) {
+  .cropper_compress_modal__container .cropper_compress_modal__container-box {
+    width: 448px;
+  }
+}

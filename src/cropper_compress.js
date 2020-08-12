@@ -129,7 +129,7 @@ export default class CropperCompress {
         this.read(target.files)
             .then((data) => {
                 target.value = "";
-                this.update(data);
+                this.updateCreateDOM(data);
             })
             .catch((e) => {
                 target.value = "";
@@ -141,15 +141,17 @@ export default class CropperCompress {
      * Cuando se sube correctamente una imagen
      * @param {Object} data
      */
-    update(data) {
+    updateCreateDOM(data) {
         Object.assign(this.data, data);
-        // console.log(this);
+        this.createModalDOM();
         this.start();
-        console.log(this);
-        console.log("message");
+        this.attachHandlerEventsAfterOnModal();
     }
 
-    start() {
+    /**
+     * Crea la estructura del modal
+     */
+    createModalDOM() {
         this.modalComponent = document.getElementById("cropper_compress_modal");
         this.modalComponent.innerHTML = `
         <div class="cropper_compress_modal__container">
@@ -159,11 +161,104 @@ export default class CropperCompress {
               <button id="buttonCloseModal">&times;</button>
             </div>
             <div class="cropper_compress_modal__container-box_body">
-              <img src="" crossorigin="anonymous" id="imageToBeCropped">
+              <img src="${this.data.url}" ref="image" alt="${this.data.name}" crossorigin="anonymous" id="imageToBeCropped">
             </div>
-            <div class="cropper_compress_modal__container-box_footer"><button>Establecer mi nueva imagen</button></div>
+            <button class="cropper_compress_modal__container-box_footer">Establecer mi nueva imagen</button>
           </div>
         </div>`;
+    }
+
+    deleteModalDOM() {
+        this.modalComponent.innerHTML = ``;
+    }
+
+    /**
+     * Inicializa la funcionalidad del croper
+     */
+    start() {
+        this.imageToBeCropped = document.getElementById("imageToBeCropped");
+
+        const { data } = this;
+        if (data.cropped || this.cropper) {
+            return;
+        }
+
+        this.cropper = new Cropper(this.imageToBeCropped, {
+            autoCrop: true,
+            aspectRatio: 1,
+            viewMode: 1,
+            background: false,
+
+            ready: () => {
+                if (this.croppedData) {
+                    this.cropper
+                        .crop()
+                        .setData(this.croppedData)
+                        .setCanvasData(this.canvasData)
+                        .setCropBoxData(this.cropBoxData);
+
+                    this.croppedData = null;
+                    this.canvasData = null;
+                    this.cropBoxData = null;
+                }
+            },
+
+            crop: ({ detail }) => {
+                if (detail.width > 0 && detail.height > 0 && !data.cropping) {
+                    this.updateCrop({
+                        cropping: true,
+                    });
+                }
+            },
+        });
+    }
+
+    attachHandlerEventsAfterOnModal() {
+        this.buttonCloseModal = document.getElementById("buttonCloseModal");
+        this.buttonCloseModal.addEventListener("click", this.stop.bind(this));
+    }
+
+    /**
+     * Cancela el recorte de la imagen.
+     */
+    stop() {
+        this.deleteModalDOM();
+        if (this.cropper) {
+            this.cropper.destroy();
+            this.cropper = null;
+        }
+    }
+
+    /**
+     * Recorta la imagen.
+     */
+    crop() {
+        const { cropper, data } = this;
+
+        if (data.cropping) {
+            this.croppedData = cropper.getData();
+            this.canvasData = cropper.getCanvasData();
+            this.cropBoxData = cropper.getCropBoxData();
+            this.updateCrop({
+                cropped: true,
+                cropping: false,
+                previousUrl: data.url,
+                url: cropper
+                    .getCroppedCanvas(
+                        data.type === "image/png"
+                            ? {}
+                            : {
+                                  fillColor: "#fff",
+                              }
+                    )
+                    .toDataURL(data.type),
+            });
+            this.stop();
+        }
+    }
+
+    updateCrop(data) {
+        Object.assign(this.data, data);
     }
 
     /**
