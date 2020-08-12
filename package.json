@@ -35,5 +35,8 @@
         "presets": [
             "es2015-rollup"
         ]
+    },
+    "dependencies": {
+        "cropperjs": "^1.5.7"
     }
 }

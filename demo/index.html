@@ -7,6 +7,11 @@
 </head>
 
 <style>
+  * {
+    box-sizing: border-box;
+    margin: 0;
+  }
+
   .contenedor {
     padding: 18px;
     position: absolute;
@@ -26,18 +31,22 @@
 <body>
   <div class="contenedor">
     <h1>Cropper compress</h1>
+    <!-- Guardar el lugar donde el archivo va a ser mostrado -->
     <div id="cropper_compress">
-      <img src="" alt="" id="sourceImage">
+      <img src="" alt="" id="sourceImage" />
     </div>
   </div>
+  <!-- Crear el modal afuera de otras etiquetas, se muestra cuando se carga una imagen. -->
+  <div id="cropper_compress_modal"></div>
 
+  <!-- Importante agregar el paquete cropperjs -->
+  <!-- <script src="../package/cropper.min.js"></script> -->
+  <script src="https://unpkg.com/cropperjs@1.5.7/dist/cropper.min.js"></script>
   <script>
-    var cropper_compress = new CropperCompress("#cropper_compress", {
-      compression: false,
-      clippingType: "circle",
-    });
-
-    var value = cropper_compress.getCropped();
+    var cropper_compress = new CropperCompress(
+      "#sourceImage",
+      "/upload/image",
+    );
   </script>
 </body>
 
