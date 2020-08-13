@@ -39,6 +39,9 @@ export default class CropperCompress {
             this.endPoint = endPoint;
         }
 
+        // Obtiene el src de la imagen.
+        const imageHasSrc = element.getAttribute("src");
+
         // Parse options
         this.options = CropperCompress.parseOptions(options || {});
 

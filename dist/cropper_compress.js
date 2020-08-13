@@ -64,6 +64,7 @@ var CropperCompress$1 = function () {
         } else {
             this.endPoint = endPoint;
         }
+        var imageHasSrc = element.getAttribute("src");
         this.options = CropperCompress.parseOptions(options || {});
         if (!element.getAttribute("src")) {
             this.initialize("../noimage.png");

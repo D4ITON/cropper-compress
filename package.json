@@ -1,11 +1,12 @@
 {
     "name": "cropper_compress",
-    "version": "0.5.0",
+    "version": "0.5.1",
     "description": "Comprime y recorta la imagen",
     "author": "D4ITON",
     "license": "MIT",
     "main": "dist/cropper_compress.js",
     "typings": "./index.d.ts",
+    "private": false,
     "scripts": {
         "test": "mocha",
         "build": "rollup --config rollup.config.dev.js & cp src/css/cropper_compress.css dist/cropper_compress.css",
@@ -35,5 +36,6 @@
         "presets": [
             "es2015-rollup"
         ]
-    }
+    },
+    "repository": "https://github.com/D4ITON/cropper_compress.git"
 }
