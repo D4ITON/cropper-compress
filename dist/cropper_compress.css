@@ -31,6 +31,12 @@
   height: 250px;
   border: 1px solid #eee;
   margin-bottom: 10px;
+  overflow: hidden;
+}
+
+.cropper_compress-image #sourceImage {
+  object-fit: cover;
+  width: 100%;
 }
 
 /*
