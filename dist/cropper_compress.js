@@ -90,7 +90,7 @@ var CropperCompress$1 = function () {
         key: "createDOM",
         value: function createDOM(elementSrc) {
             this.containerEl = document.querySelector("#cropper_compress");
-            this.containerEl.outerHTML = "\n        <div class=\"cropper_compress-container\" touch-action=\"none\">\n          <div class=\"wrap-box\">\n            <div class=\"cropper_compress-image\">\n              <img src=\"" + elementSrc + "\">\n            </div>\n          </div>\n          <div class=\"cropper_compress-actions\">\n            <label class=\"cropper_compress-actions__button\">\n              <input type=\"file\" size=\"60\" id=\"inputImage\" accept=\"image/*\">\n              Subir imagen\n            </label>\n            <button class=\"cropper_compress-actions__button\">Quitar imagen</button>\n          </div>\n        </div>\n      ";
+            this.containerEl.outerHTML = "\n        <div class=\"cropper_compress-container\" touch-action=\"none\">\n          <div class=\"wrap-box\">\n            <div class=\"cropper_compress-image\">\n              <img src=\"" + elementSrc + "\" id=\"sourceImage\" >\n            </div>\n          </div>\n          <div class=\"cropper_compress-actions\">\n            <label class=\"cropper_compress-actions__button\">\n              <input type=\"file\" size=\"60\" id=\"inputImage\" accept=\"image/*\">\n              Subir imagen\n            </label>\n            <button class=\"cropper_compress-actions__button\">Quitar imagen</button>\n          </div>\n        </div>\n      ";
         }
     }, {
         key: "attachHandlerEvents",
@@ -160,6 +160,7 @@ var CropperCompress$1 = function () {
             this.createModalDOM();
             this.start();
             this.attachHandlerEventsAfterOnModal();
+            console.log(this);
         }
     }, {
         key: "createModalDOM",

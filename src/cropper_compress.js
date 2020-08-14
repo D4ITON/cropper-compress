@@ -74,7 +74,7 @@ export default class CropperCompress {
         <div class="cropper_compress-container" touch-action="none">
           <div class="wrap-box">
             <div class="cropper_compress-image">
-              <img src="${elementSrc}">
+              <img src="${elementSrc}" id="sourceImage" >
             </div>
           </div>
           <div class="cropper_compress-actions">
@@ -154,6 +154,7 @@ export default class CropperCompress {
         this.createModalDOM();
         this.start();
         this.attachHandlerEventsAfterOnModal();
+        console.log(this);
     }
 
     /**
