@@ -47,7 +47,7 @@ export default class CropperCompress {
 
         // Verifica si se envia una imagen por el atributo src
         if (!element.getAttribute("src")) {
-            this.initialize("../noimage.png");
+            this.initialize("./noimage.png");
         } else {
             this.initialize(imageHasSrc);
         }
@@ -70,7 +70,7 @@ export default class CropperCompress {
         // Muestra el template
         this.containerEl = document.querySelector("#cropper_compress");
 
-        this.containerEl.outerHTML = `
+        this.containerEl.innerHTML = `
         <div class="cropper_compress-container" touch-action="none">
           <div class="wrap-box">
             <div class="cropper_compress-image">
@@ -82,15 +82,23 @@ export default class CropperCompress {
               <input type="file" size="60" id="inputImage" accept="image/*">
               Subir imagen
             </label>
-            <button class="cropper_compress-actions__button">Quitar imagen</button>
+            <label id="buttonRemoveImage" class="cropper_compress-actions__button">Quitar imagen</label>
           </div>
         </div>
       `;
     }
 
+    /**
+     * Maneja los eventos iniciales como subir una imagen o quitarla
+     */
     attachHandlerEvents() {
         this.inputImage = document.getElementById("inputImage");
         this.inputImage.addEventListener("change", this.change.bind(this));
+        this.buttonRemoveImage = document.getElementById("buttonRemoveImage");
+        this.buttonRemoveImage.addEventListener(
+            "click",
+            this.removeImage.bind(this)
+        );
     }
 
     /**
@@ -177,6 +185,9 @@ export default class CropperCompress {
         </div>`;
     }
 
+    /**
+     * Esta funcion se llama al cerrar el modal
+     */
     deleteModalDOM() {
         this.modalComponent.innerHTML = ``;
     }
@@ -223,6 +234,9 @@ export default class CropperCompress {
         });
     }
 
+    /**
+     * Manejadores de eventos en el modal como recortar o cerrar el modal
+     */
     attachHandlerEventsAfterOnModal() {
         this.buttonCloseModal = document.getElementById("buttonCloseModal");
         this.buttonCloseModal.addEventListener("click", this.stop.bind(this));
@@ -267,14 +281,36 @@ export default class CropperCompress {
             });
             console.log(this);
             this.sendToEndPoint();
+            this.showImageCropped();
             this.stop();
         }
     }
 
+    /**
+     * Luego de recortar la imagen la muestra en la imagen
+     */
+    showImageCropped() {
+        this.initialize(this.data.url);
+    }
+
+    /**
+     * Actualiza el estado si la imagen esta recortada o no
+     * @param {Object} data contiene datos de la instancia actual
+     */
     updateCrop(data) {
         Object.assign(this.data, data);
     }
 
+    /**
+     * Quita la imagen cargada que tiene
+     */
+    removeImage() {
+        console.log("removeImage");
+    }
+
+    /**
+     * Envia la imagen a un endpoint que tenga conectado
+     */
     async sendToEndPoint() {
         // Fetch function
         const { data } = this;

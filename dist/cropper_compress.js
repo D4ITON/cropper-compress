@@ -67,7 +67,7 @@ var CropperCompress$1 = function () {
         var imageHasSrc = element.getAttribute("src");
         this.options = CropperCompress.parseOptions(options || {});
         if (!element.getAttribute("src")) {
-            this.initialize("../noimage.png");
+            this.initialize("./noimage.png");
         } else {
             this.initialize(imageHasSrc);
         }
@@ -90,13 +90,15 @@ var CropperCompress$1 = function () {
         key: "createDOM",
         value: function createDOM(elementSrc) {
             this.containerEl = document.querySelector("#cropper_compress");
-            this.containerEl.outerHTML = "\n        <div class=\"cropper_compress-container\" touch-action=\"none\">\n          <div class=\"wrap-box\">\n            <div class=\"cropper_compress-image\">\n              <img src=\"" + elementSrc + "\" id=\"sourceImage\" >\n            </div>\n          </div>\n          <div class=\"cropper_compress-actions\">\n            <label class=\"cropper_compress-actions__button\">\n              <input type=\"file\" size=\"60\" id=\"inputImage\" accept=\"image/*\">\n              Subir imagen\n            </label>\n            <button class=\"cropper_compress-actions__button\">Quitar imagen</button>\n          </div>\n        </div>\n      ";
+            this.containerEl.innerHTML = "\n        <div class=\"cropper_compress-container\" touch-action=\"none\">\n          <div class=\"wrap-box\">\n            <div class=\"cropper_compress-image\">\n              <img src=\"" + elementSrc + "\" id=\"sourceImage\" >\n            </div>\n          </div>\n          <div class=\"cropper_compress-actions\">\n            <label class=\"cropper_compress-actions__button\">\n              <input type=\"file\" size=\"60\" id=\"inputImage\" accept=\"image/*\">\n              Subir imagen\n            </label>\n            <label id=\"buttonRemoveImage\" class=\"cropper_compress-actions__button\">Quitar imagen</label>\n          </div>\n        </div>\n      ";
         }
     }, {
         key: "attachHandlerEvents",
         value: function attachHandlerEvents() {
             this.inputImage = document.getElementById("inputImage");
             this.inputImage.addEventListener("change", this.change.bind(this));
+            this.buttonRemoveImage = document.getElementById("buttonRemoveImage");
+            this.buttonRemoveImage.addEventListener("click", this.removeImage.bind(this));
         }
         /**
          * Cuando hay un error al cargar la imagen
@@ -241,13 +243,28 @@ var CropperCompress$1 = function () {
                 });
                 console.log(this);
                 this.sendToEndPoint();
+                this.showImageCropped();
                 this.stop();
             }
         }
     }, {
+        key: "showImageCropped",
+        value: function showImageCropped() {
+            this.initialize(this.data.url);
+        }
+        /**
+         * Actualiza el estado si la imagen esta recortada o no
+         * @param {Object} data contiene datos de la instancia actual
+         */
+    }, {
         key: "updateCrop",
         value: function updateCrop(data) {
             Object.assign(this.data, data);
+        }
+    }, {
+        key: "removeImage",
+        value: function removeImage() {
+            console.log("removeImage");
         }
     }, {
         key: "sendToEndPoint",
