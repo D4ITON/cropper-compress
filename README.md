@@ -2,18 +2,46 @@
 
 Comprime y recorta una imagen.
 
+⚠️ En desarrollo! ⚠️ \
+⚠️ In development! ⚠️
+
+## Dependencias
+
+[cropperjs](https://fengyuanchen.github.io/cropperjs/).
+
+```html
+<script src="https://unpkg.com/cropperjs@1.5.7/dist/cropper.min.js"></script>
+<link
+    rel="stylesheet"
+    href="https://unpkg.com/cropperjs@1.5.7/dist/cropper.min.css"
+/>
+```
+
 ## Options
 
-### compresssion:
+#### **compression**
 
-Si va a comprimir o no la imagen
-Type: Boolean
-Default: true
-Possible values: true, false
+Si va a comprimir la imagen o no.
 
-### clippingType:
+-   Type: `Boolean`
+-   Default: `true`
+-   Example: `{ aspectRatio: false }` (No comprimirá la imagen)
 
-Tipo de recorte
-Type: String
-Default: "square"
-Possible values: "square", "circle" or "free"
+#### **clippingType**
+
+Como se mostrará el area de recorte.
+
+-   Type: `String`
+-   Default: `square`
+-   Example: `{ clippingType: "circle }"`
+-   Possible values: `"square", "circle" or "free"`
+
+_Note: `circle` No recorta de forma circular, cuando este recortado se debería mostrar la iamgen circular con css._
+
+⚠️ En desarrollo! ⚠️
+⚠️ In development! ⚠️
+
+---
+
+Copyright © 2020 Dalthon.
+Released under the MIT License.
