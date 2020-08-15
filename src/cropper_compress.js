@@ -39,18 +39,19 @@ export default class CropperCompress {
             this.endPoint = endPoint;
         }
 
-        // Obtiene el src de la imagen.
-        const imageHasSrc = element.getAttribute("src");
-
         // Parse options
         this.options = CropperCompress.parseOptions(options || {});
 
         // Verifica si se envia una imagen por el atributo src
         if (!element.getAttribute("src")) {
-            this.initialize("./noimage.png");
+            this.data.url =
+                "https://unpkg.com/cropper_compress@0.5.5/dist/noimage.png";
         } else {
-            this.initialize(imageHasSrc);
+            // Obtiene el src de la imagen.
+            const elementSrc = element.getAttribute("src");
+            this.data.url = elementSrc;
         }
+        this.initialize(this.data.url);
     }
 
     /**
@@ -280,7 +281,7 @@ export default class CropperCompress {
                     .toDataURL(data.type),
             });
             console.log(this);
-            this.sendToEndPoint();
+            this.sendToEndPoint(this.data.url, true);
             this.showImageCropped();
             this.stop();
         }
@@ -305,26 +306,33 @@ export default class CropperCompress {
      * Quita la imagen cargada que tiene
      */
     removeImage() {
-        console.log("removeImage");
+        this.data.url =
+            "https://unpkg.com/cropper_compress@0.5.5/dist/noimage.png";
+        this.createDOM(this.data.url);
+        this.sendToEndPoint(this.data.url, false);
     }
 
     /**
      * Envia la imagen a un endpoint que tenga conectado
+     * @param {String} dataUrl
+     * @param {Boolean} isBase64
      */
-    async sendToEndPoint() {
+    async sendToEndPoint(dataUrl, isBase64) {
         // Fetch function
-        const { data } = this;
-        if (!data.url) {
+        if (!dataUrl) {
             throw "No url image.";
         }
 
-        const block = data.url.split(";");
-        const contentType = block[0].split(":")[1];
-        const realData = block[1].split(",")[1];
-
-        const blob = CropperCompress.b64toBlob(realData, contentType);
         const formData = new FormData();
-        formData.append("image", blob);
+        if (!isBase64) {
+            formData.append("image", dataUrl);
+        } else {
+            const block = dataUrl.split(";");
+            const contentType = block[0].split(":")[1];
+            const realData = block[1].split(",")[1];
+            const blob = CropperCompress.b64toBlob(realData, contentType);
+            formData.append("image", blob);
+        }
 
         try {
             const response = await fetch(this.endPoint, {
