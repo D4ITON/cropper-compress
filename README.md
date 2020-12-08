@@ -36,7 +36,7 @@ Como se mostrará el area de recorte.
 -   Example: `{ clippingType: "circle }"`
 -   Possible values: `"square", "circle" or "free"`
 
-_Note: `circle` No recorta de forma circular, cuando este recortado se debería mostrar la iamgen circular con css._
+_Note: `circle` No recorta de forma circular, cuando este recortado se debería mostrar la imagen circular con css._
 
 ⚠️ En desarrollo! ⚠️
 ⚠️ In development! ⚠️
