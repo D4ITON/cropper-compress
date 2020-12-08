@@ -2,8 +2,8 @@
 
 Comprime y recorta una imagen.
 
-⚠️ En desarrollo! ⚠️ \
-⚠️ In development! ⚠️
+⚠️ Sin continuación! ⚠️ \
+⚠️ No continuation! ⚠️
 
 ## Dependencias
 
@@ -38,10 +38,8 @@ Como se mostrará el area de recorte.
 
 _Note: `circle` No recorta de forma circular, cuando este recortado se debería mostrar la imagen circular con css._
 
-⚠️ En desarrollo! ⚠️
-⚠️ In development! ⚠️
-
+⚠️ Sin continuación! ⚠️ \
+⚠️ No continuation! ⚠️
 ---
 
-Copyright © 2020 Dalthon.
-Released under the MIT License.
+License MIT
