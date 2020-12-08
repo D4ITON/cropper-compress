@@ -38,8 +38,7 @@ Como se mostrará el area de recorte.
 
 _Note: `circle` No recorta de forma circular, cuando este recortado se debería mostrar la imagen circular con css._
 
-⚠️ Sin continuación! ⚠️ \
-⚠️ No continuation! ⚠️
+
 ---
 
 License MIT
